@@ -1,0 +1,27 @@
+@prefix myo:   <http://neuron4web.palermo.enea.it/data#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix purl:  <http://purl.org/> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+
+myo:filexy.wav  dc:relation  ( myo:pippo myo:pluto ) .
+
+myo:pluto  a       myo:TimeDomain ;
+        dc:rights  purl:cc-by ;
+        dc:title   "pluto" .
+
+myo:TimeDomain  a        owl:Class ;
+        rdfs:comment     "Class for time domain measures"@en ;
+        rdfs:label       "TimeDomain"@en ;
+        owl:versionInfo  "0.0" .
+
+myo:pippo  a       myo:FrequencyDomain ;
+        dc:rights  purl:cc-by ;
+        dc:title   "pippo" .
+
+myo:FrequencyDomain  a   owl:Class ;
+        rdfs:comment     "Class for frequency domain measures"@en ;
+        rdfs:label       "FrequencyDomain"@en ;
+        owl:versionInfo  "0.0" .
