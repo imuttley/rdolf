@@ -1,17 +1,21 @@
 package it.enea.data.ontology;
 
+import it.enea.data.model.GenericDocument;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.transaction.TransactionManager;
+
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.RDFList;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.DC;
-import org.apache.jena.vocabulary.RDF;
 
 /**
  * Test GRAPH
@@ -41,7 +45,6 @@ public class App {
 		fd.addVersionInfo("0.0");
 		fd.addComment("Class for frequency domain measures", "en");
 
-		
 		// create the resource
 		Resource pippo = fd.createIndividual(nsURI + "pippo");
 		Resource pluto = td.createIndividual(nsURI + "pluto");
@@ -57,18 +60,41 @@ public class App {
 		
 		root.addProperty(DC.relation,cs);
 		
-		
 		// add the property
 		// graph.addLiteral(DC.description,
 		// model.createLiteral("an RDF vocabulary for mammals", "en"));
 		model.write(System.out, "RDF/XML");
 
+		TransactionManager tm = com.arjuna.ats.jta.TransactionManager.transactionManager();
+
+		
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("OntologyDB");
+		EntityManager em = emf.createEntityManager();
+		
 		try {
+			tm.begin();
+		
+			GenericDocument gd = new GenericDocument();
+			gd.setId("testid");
+			gd.setDescription("test description");
+			gd.setTitle("test title");
+			em.persist(gd);
+			//em.refresh(gd);
+			em.flush();
+			em.close();
+			
+			tm.commit();
+			
+		} catch ( Exception e ) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*try {
 			model.write(new FileOutputStream("ttlfile.ttl"), "TURTLE");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
 }
